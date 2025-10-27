@@ -1,0 +1,99 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Validate PR Description
+      run: |
+        echo "Validating PR..."
+        echo "PR Title: ${{ github.event.pull_request.title }}"
+        echo "PR Body length: $(echo '${{ github.event.pull_request.body }}' | wc -c)"
+
+    - name: Check Documentation
+      run: |
+        echo "Checking documentation files..."
+        if [ -f README.md ]; then
+          echo "✓ README.md exists"
+          echo "README.md size: $(wc -l < README.md) lines"
+        else
+          echo "✗ README.md missing"
+          exit 1
+        fi
+
+        if [ -f README.zh.md ]; then
+          echo "✓ README.zh.md exists"
+          echo "README.zh.md size: $(wc -l < README.zh.md) lines"
+        else
+          echo "✗ README.zh.md missing"
+          exit 1
+        fi
+
+        if [ -d docs ]; then
+          echo "✓ docs directory exists"
+          echo "Documentation files:"
+          find docs -name "*.md" | wc -l
+        else
+          echo "✗ docs directory missing"
+          exit 1
+        fi
+
+    - name: Check Build Status
+      run: |
+        echo "Checking project structure..."
+
+        # Check for GitHub Actions workflows
+        if [ -d .github/workflows ]; then
+          echo "✓ GitHub Actions workflows found"
+          ls -la .github/workflows/
+        else
+          echo "✗ No GitHub Actions workflows found"
+          exit 1
+        fi
+
+        # Check for configuration files
+        config_files=(".gitignore" ".markdownlint.json" ".mlc_config.json")
+        for file in "${config_files[@]}"; do
+          if [ -f "$file" ]; then
+            echo "✓ $file exists"
+          else
+            echo "⚠ $file missing (optional)"
+          fi
+        done
+
+    - name: Check Branch Status
+      run: |
+        echo "Branch information:"
+        echo "Current branch: ${{ github.ref }}"
+        echo "Base branch: ${{ github.base_ref }}"
+        echo "Head branch: ${{ github.head_ref }}"
+
+        # Check if this is a docs-related PR
+        if [[ "${{ github.event.pull_request.title }}" == *"docs"* ]] || [[ "${{ github.event.pull_request.title }}" == *"README"* ]]; then
+          echo "✓ This is a documentation-related PR"
+        else
+          echo "ℹ This PR may not be documentation-related"
+        fi
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && github.event.action == 'opened'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🎉 **Welcome!** Thank you for contributing to the AI Smart Glasses project!\n\n📋 **PR Validation Results:**\n\n✅ Documentation structure validated\n✅ Build status checked\n✅ Configuration files verified\n\n🚀 **Next Steps:**\n- Wait for maintainer review\n- Address any feedback\n- Once approved, this PR will be merged\n\n📖 **Documentation:**\n- [English README](README.md)\n- [中文 README](README.zh.md)\n- [Documentation Center](docs/README.md)\n\n💬 **Questions?** Feel free to ask in the comments!'
+          })

@@ -87,7 +87,6 @@ coverage.xml
 # Mermaid temporary files
 .mmd-temp/
 .claude/
-.github/
 .specify/
 specs/
 CLAUDE.md
