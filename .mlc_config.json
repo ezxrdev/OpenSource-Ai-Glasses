@@ -1,0 +1,27 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost",
+      "replacement": "http://localhost"
+    },
+    {
+      "pattern": "^https?://.*\\.example\\.com",
+      "replacement": "https://example.com"
+    }
+  ],
+  "replacementPatterns": [],
+  "httpHeaders": [
+    {
+      "urls": ["https://github.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "markdown-link-check"
+      }
+    }
+  ],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206, 301, 302, 303, 307, 308]
+}

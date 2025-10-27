@@ -1,0 +1,93 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation build files
+_site/
+docs/_site/
+.jekyll/
+.jekyll-cache/
+.jekyll-metadata
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.backup
+
+# Documentation specific
+docs/assets/temp/
+docs/assets/draft/
+docs/cache/
+
+# Internal documentation (should be in separate private repo)
+internal-docs/
+
+# Node.js (if used for documentation tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if used for documentation generation)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Backup files
+*.orig
+*.rej
+
+# Mermaid temporary files
+.mmd-temp/
+.claude/
+.github/
+.specify/
+specs/
+CLAUDE.md
